@@ -1,8 +1,16 @@
 const ldapClient = require('../../../ldap');
 import jwt from 'jsonwebtoken';
 import {escapeDN, escapeLDAPSearchFilter} from './ldap-serialize';
+import uploadRoute from './upload';
+
+const noSecure = {
+    isSecure: false
+};
+
+const cookieConfig = process.env.NODE_ENV === 'development' ? noSecure : null;
 
 export default [
+    uploadRoute,
     {
         method: 'GET',
         path: '/',
@@ -12,6 +20,16 @@ export default [
         config: {
             auth: 'token'
         },
+    },
+    {
+        method: 'POST',
+        path: '/logout',
+        handler: (req, reply) => {
+            reply({
+                error: false,
+                message: 'logout successful'
+            }).unstate('access_token', cookieConfig);
+        }
     },
     {
         method: 'POST',
@@ -46,7 +64,10 @@ export default [
                                 algorithm: 'HS256',
                                 expiresIn: '1h',
                             });
-                            reply('login successful').state('access_token', token);
+                            reply({
+                                error: false,
+                                message: 'login successful'
+                            }).state('access_token', token, cookieConfig);
                         });
                     });
                 }

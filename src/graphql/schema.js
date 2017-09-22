@@ -1,82 +1,20 @@
 import { makeExecutableSchema } from 'graphql-tools';
 import { GraphQLScalarType } from 'graphql';
 import { Kind } from 'graphql/language';
-
-const bookshelf = require('../../bookshelf');
-
-const Assignment = bookshelf.Model.extend({
-    tableName: 'assignments',
-    submission_steps: function () {
-        return this.hasMany(SubmissionStep);
-    }
-});
-
-const Assignments = bookshelf.Collection.extend({
-    model: Assignment
-});
-
-const SubmissionStep = bookshelf.Model.extend({
-    tableName: 'submission_steps',
-    assignment: function () {
-        return this.belongsTo(Assignment, 'assignment_id');
-    },
-    components: function () {
-        return this.hasMany(GradingComponent);
-    },
-    files: function () {
-        return this.hasMany(SubmissionFile);
-    },
-    exceptions: function () {
-        return this.hasMany(SubmissionException);
-    }
-});
-
-const SubmissionFile = bookshelf.Model.extend({
-    tableName: 'submission_step_files',
-    submission_step: function () {
-        return this.belongsTo(SubmissionStep);
-    }
-});
-
-const SubmissionException = bookshelf.Model.extend({
-    tableName: 'submission_step_exceptions',
-    submission_step: function () {
-        return this.belongsTo(SubmissionStep);
-    }
-});
-
-const GradingComponent = bookshelf.Model.extend({
-    tableName: 'grading_components',
-    submission_step: function () {
-        return this.belongsTo(SubmissionStep);
-    },
-    files: function () {
-        return this.hasMany(GradingComponentFile);
-    },
-    graders: function () {
-        return this.hasMany(Grader);
-    }
-});
-
-const GradingComponentFile = bookshelf.Model.extend({
-    tableName: 'grading_component_file',
-    grading_component: function () {
-        return this.belongsTo(GradingComponent);
-    }
-});
-
-const Grader = bookshelf.Model.extend({
-    tableName: 'graders',
-    grading_component: function () {
-        return this.belongsTo(GradingComponent);
-    }
-});
+import { Assignment, Assignments } from './models/Assignment';
+const ldapClient = require('../../ldap');
 
 const typeDefs = `
 	scalar Date
 	enum SubmissionType {
 	    STUDENT
 	    INSTRUCTOR
+	}
+	enum Permission {
+	    CREATE
+	    READ
+	    UPDATE
+	    DELETE
 	}
 	type Grader {
 		id: ID!
@@ -140,13 +78,165 @@ const typeDefs = `
         description: String
         submission_steps: [SubmissionStep!]!
     }
+    type Course {
+        id: ID!
+        name: String
+        assigns: [String]
+        term: String
+    }
+    type Department {
+        id: ID!
+        name: String
+        courses: [Course]
+        privileges: [Permission]
+    }
+    type Manage {
+        departments: [Department]
+        privileges: [Permission]
+    }
+    type User {
+        id: ID
+        username: String!
+        groups: [String!]
+        term: String
+        admin: [Course]
+        grading: [Course]
+        manage: Manage
+        courses: [Course]
+    }
     type Query {
-		assignments: [Assignment]
+		assignments: [Assignment],
+		user: User
 	}
 	type Mutation {
 	    addAssignment(assignment: AssignmentInput!): Assignment
 	}
 `;
+
+function ldapSearch (username) {
+    return new Promise(function (resolve, reject) {
+        let groups = [];
+        const filter = `(&(cn=*)(memberUid=${username}))`;
+        ldapClient.search('dc=eecs,dc=tufts,dc=edu', {
+            filter,
+            attributes: ['cn'],
+            scope: 'sub'
+        }, function (err, res) {
+            res.on('searchEntry', function (entry) {
+                groups.push(entry.object.cn);
+            });
+            res.on('end', function (result) {
+                resolve({
+                    username,
+                    groups
+                });
+            });
+        });
+    });
+}
+
+const grading = [
+    {
+        "id": 1,
+        "name": "COMP105",
+        "assigns": ["hw1", "hw2"],
+        "term": "2017u"
+    },
+    {
+        "id": 2,
+        "name": "COMP20",
+        "assigns": ["hw1", "hw2"],
+        "term": "2017u"
+    },
+    {
+        "id": 3,
+        "name": "COMP00",
+        "assigns": ["hw1", "hw2"],
+        "term": "2017u"
+    }
+];
+
+const admin = [
+    {
+        "id": 2,
+        "name": "COMP20",
+        "assigns": ["hw1", "hw2"],
+        "term": "2017u"
+    },
+    {
+        "id": 3,
+        "name": "COMP00",
+        "assigns": ["hw1", "hw2"],
+        "term": "2017u"
+    }
+];
+
+const courses = [
+    {
+        "id": 4,
+        "name": "COMP11",
+        "assigns": ["hw1", "hw2"],
+        "term": "2017u"
+    },
+    {
+        "id": 5,
+        "name": "COMP15",
+        "assigns": ["hw1", "hw2"],
+        "term": "2017u"
+    },
+    {
+        "id": 6,
+        "name": "COMP40",
+        "assigns": ["Final", "Midterm"],
+        "term": "2015s"
+    }
+];
+
+const manage = {
+    "departments": [
+        {
+            "id": 1,
+            "name": "COMP",
+            "courses": [
+                {
+                    "id": 5,
+                    "name": "COMP15",
+                    "assigns": ["hw1", "hw2"],
+                    "term": "2017u"
+                },
+                {
+                    "id": 2,
+                    "name": "COMP20",
+                    "assigns": ["hw1", "hw2"],
+                    "term": "2017u"
+                }
+            ],
+            "privileges": ["CREATE", "READ", "UPDATE", "DELETE"]
+        },
+        {
+            "id": 2,
+            "name": "MATH",
+            "courses": [
+                {
+                    "id": 7,
+                    "name": "MATH71",
+                    "assigns": ["ps1"],
+                    "term": "2017u"
+                },
+                {
+                    "id": 8,
+                    "name": "MATH61",
+                    "assigns": ["star1"],
+                    "term": "2017s"
+                }
+            ],
+            "privileges": ["CREATE", "READ", "UPDATE", "DELETE"]
+        }
+    ],
+    "privileges": ["CREATE", "READ", "UPDATE", "DELETE"]
+};
+
+const term = "2017u";
 
 const resolvers = {
     Date: new GraphQLScalarType({
@@ -174,6 +264,19 @@ const resolvers = {
                 return a.toJSON();
             });
         },
+        user: (obj, args, context, info) => {
+            return ldapSearch(context.username).then(function (data) {
+                return {
+                    username: data.username,
+                    groups: data.groups,
+                    grading,
+                    admin,
+                    courses,
+                    manage,
+                    term
+                }
+            });
+        }
     },
     Mutation: {
         addAssignment: (root, {assignment}) => {

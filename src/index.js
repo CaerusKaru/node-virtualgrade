@@ -7,7 +7,13 @@ import routes from './graphql/routes';
 
 server.connection({
     host: 'localhost',
-    port: 8000
+    port: 8000,
+    routes: {
+        cors: {
+            origin: ['http://localhost:4200'],
+            credentials: true
+        }
+    }
 });
 
 server.register(hapiJwt, (err) => {
@@ -30,3 +36,5 @@ server.register(hapiJwt, (err) => {
         });
     });
 });
+
+console.log(process.env.NODE_ENV);
