@@ -7,7 +7,7 @@ import routes from './graphql/routes';
 
 server.connection({
     host: 'localhost',
-    port: 8000,
+    port: 4000,
     routes: {
         cors: {
             origin: ['http://localhost:4200'],
