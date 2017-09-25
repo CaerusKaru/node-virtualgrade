@@ -36,5 +36,3 @@ server.register(hapiJwt, (err) => {
         });
     });
 });
-
-console.log(process.env.NODE_ENV);

@@ -3,11 +3,11 @@ import jwt from 'jsonwebtoken';
 import {escapeDN, escapeLDAPSearchFilter} from './ldap-serialize';
 import uploadRoute from './upload';
 
-const noSecure = {
-    isSecure: false
+const cookieConfig = {
+    isSecure: !process.env.NODE_ENV,
+    isSameSite: process.env.NODE_ENV ? false : 'Strict',
+    path: '/'
 };
-
-const cookieConfig = process.env.NODE_ENV === 'development' ? noSecure : null;
 
 export default [
     uploadRoute,
