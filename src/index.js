@@ -6,7 +6,6 @@ import plugins from './graphql/plugins';
 import routes from './graphql/routes';
 
 server.connection({
-    host: 'localhost',
     port: 4000,
     routes: {
         cors: {
