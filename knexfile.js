@@ -8,5 +8,8 @@ module.exports = {
         database: process.env.DB_NAME,
         charset: 'utf8',
     },
-    useNullAsDefault: true
+    useNullAsDefault: true,
+    seeds: {
+        directory: __dirname + '/seeds'
+    }
 };

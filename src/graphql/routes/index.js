@@ -15,7 +15,7 @@ export default [
         method: 'GET',
         path: '/',
         handler: (request, reply) => {
-            reply('API online' + ' ' + JSON.stringify(request.auth.credentials));
+            reply({message: 'API online' + ' ' + JSON.stringify(request.auth.credentials)});
         },
         config: {
             auth: 'token'

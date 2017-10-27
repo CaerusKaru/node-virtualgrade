@@ -1,21 +1,13 @@
 import bookshelf from '../../../bookshelf';
 import { Assignment } from './Assignment';
 import SubmissionFile from './SubmissionFile';
-import SubmissionException from './SubmissionException';
-import GradingComponent from './GradingComponent';
 
-export default bookshelf.Model.extend({
+export default bookshelf.model('SubmissionStep', {
     tableName: 'submission_steps',
     assignment: function () {
-        return this.belongsTo(Assignment, 'assignment_id');
-    },
-    components: function () {
-        return this.hasMany(GradingComponent);
+        return this.belongsTo('Assignment');
     },
     files: function () {
-        return this.hasMany(SubmissionFile);
+        return this.hasMany('SubmissionFile');
     },
-    exceptions: function () {
-        return this.hasMany(SubmissionException);
-    }
 });
