@@ -8,71 +8,71 @@ import {getUser} from './queries/user';
 const typeDefs = `
 	scalar Date
 	type SubmissionType {
-	    id: ID!
-	    type: String
+    id: ID!
+    type: String
 	}
 	input SubmissionStepInput {
-	    name: String!
-        start_date: Date!
-        end_date: Date!
-        files: [String!]!
-        allow_other_files: Boolean!
+    name: String!
+    start_date: Date!
+    end_date: Date!
+    files: [String!]!
+    allow_other_files: Boolean!
 	}
 	type SubmissionStep {
-	    id: ID!
-        name: String!
-        start_date: Date!
-        end_date: Date!
-        files: [String!]!
-        allow_other_files: Boolean!
+    id: ID!
+    name: String!
+    start_date: Date!
+    end_date: Date!
+    files: [String!]!
+    allow_other_files: Boolean!
 	}
 	input AssignmentInput {
-	    name: String!
-	    description: String
-	    steps: [SubmissionStepInput]
+    name: String!
+    description: String
+    submission_steps: [SubmissionStepInput]
 	}
 	type Assignment {
-	    id: ID!
-        name: String!
-        description: String
-        type: SubmissionType
-        submission_steps: [SubmissionStep!]!
-    }
-    type Course {
-        id: ID!
-        name: String
-        assignments: [Assignment]
-        term: Term
-    }
-    type Department {
-        id: ID!
-        name: String
-        courses: [Course]
-    }
-    type Term {
-        id: ID!
-        term: String
-    }
-    type Manage {
-        departments: [Department]
-    }
-    type User {
-        id: ID
-        username: String!
-        groups: [String!]
-        term: Term
-        admin: [Course]
-        grading: [Course]
-        manage: Manage
-        courses: [Course]
-        instr: [Course]
-    }
-    type Query {
-		assignments: [Assignment],
-		user: User
+    id: ID!
+    name: String!
+    description: String
+    type: SubmissionType
+    submission_steps: [SubmissionStep!]!
+  }
+  type Course {
+    id: ID!
+    name: String
+    assignments: [Assignment]
+    term: Term
+  }
+  type Department {
+    id: ID!
+    name: String
+    courses: [Course]
+  }
+  type Term {
+    id: ID!
+    term: String
+  }
+  type Manage {
+    departments: [Department]
+  }
+  type User {
+    id: ID
+    username: String!
+    groups: [String!]
+    term: Term
+    admin: [Course]
+    grading: [Course]
+    manage: Manage
+    courses: [Course]
+    instr: [Course]
+  }
+  type Query {
+    assignments: [Assignment],
+    user: User
 	}
 	type Mutation {
-	    addAssignment(assignment: AssignmentInput!): Assignment
+    addAssignment(assignment: AssignmentInput!): Assignment
 	}
 `;
 
@@ -110,7 +110,7 @@ const resolvers = {
       Assignment
         .forge(assignment)
         .save()
-        // .tap(assignment => Promise.map(assignment.steps, step => assignment.related('submission_steps').create(step)))
+        .tap(assignment => Promise.map(assignment.steps, step => assignment.related('submission_steps').create(step)))
         .then(assignment => assignment);
     }
   }

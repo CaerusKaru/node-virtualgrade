@@ -1,6 +1,6 @@
 module.exports = {
     migrations: { tableName: 'knex_migrations' },
-    client: 'mysql',
+    client: 'pg',
     connection: {
         host: process.env.DB_HOST,
         user: process.env.DB_USER,

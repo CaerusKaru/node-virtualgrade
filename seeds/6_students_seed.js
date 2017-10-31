@@ -8,6 +8,7 @@ exports.seed = function(knex, Promise) {
         {
           id: 1,
           username: 'ap',
+          num_tokens: 3,
           course_id: 1
         },
       ]);
