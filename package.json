@@ -4,12 +4,15 @@
   "description": "Node GraphQL endpoint for Virtual Grade",
   "main": "index.js",
   "scripts": {
-    "start": "node index",
+    "clean": "rimraf dist",
+    "build": "tsc",
+    "watch:build": "tsc --watch",
+    "watch:server": "nodemon './dist/src/index.js' --watch './dist'",
+    "start": "npm-run-all clean build --parallel watch:build watch:server --print-label",
     "test": "snyk test",
-    "dev": "concurrently --raw \"webpack --watch\" \"nodemon index\"",
     "snyk-protect": "snyk protect",
     "prepare": "npm run snyk-protect",
-    "build": "webpack"
+    "build:webpack": "webpack"
   },
   "repository": {
     "type": "git",
@@ -22,9 +25,10 @@
   },
   "homepage": "https://github.com/CaerusKaru/node-virtualgrade#readme",
   "dependencies": {
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.4",
-    "babel-preset-es2015": "^6.24.1",
+    "@types/bookshelf": "^0.9.6",
+    "@types/hapi": "^16.1.10",
+    "@types/knex": "0.0.64",
+    "@types/node": "^8.0.47",
     "bookshelf": "^0.10.4",
     "boom": "^6.0.0",
     "concurrently": "^3.5.0",
@@ -40,14 +44,24 @@
     "jsonwebtoken": "^8.0.0",
     "knex": "^0.14.3",
     "ldapjs": "^1.0.2",
-    "mysql": "^2.15.0",
     "node-uuid": "^1.4.8",
     "nodemon": "^1.17.1",
     "pg": "^7.3.0",
+    "reflect-metadata": "^0.1.10",
+    "typeorm": "^0.1.1",
+    "typescript": "^2.5.3",
     "uuid": "^3.1.0",
     "webpack": "^3.11.0",
     "webpack-node-externals": "^1.6.0",
     "snyk": "^1.69.10"
   },
-  "snyk": true
+  "snyk": true,
+  "devDependencies": {
+    "@types/zen-observable": "^0.5.3",
+    "apollo-link": "^1.0.0",
+    "npm-run-all": "^4.1.1",
+    "rimraf": "^2.6.2",
+    "ts-loader": "^3.1.1",
+    "ts-node": "^3.3.0"
+  }
 }

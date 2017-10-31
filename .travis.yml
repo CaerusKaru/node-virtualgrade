@@ -8,8 +8,7 @@ branches:
   - master
   - dev
 before_install:
-- npm i -g npm@~5.3.0
-- npm i -g webpack@~3.6.0
+- npm i -g npm@latest
 install:
 - npm install
 script:
