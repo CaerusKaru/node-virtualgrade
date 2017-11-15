@@ -13,12 +13,13 @@
       "node_modules/@types"
     ],
     "lib": [
-      "es2017"
+      "es2017",
+      "esnext.asynciterable"
     ],
     "module": "commonjs",
     "types": [
       "node"
     ],
-    "baseUrl": "src"
+    "baseUrl": "src",
   }
 }
