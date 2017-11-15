@@ -1,11 +1,14 @@
 import * as hapi from 'hapi';
 import * as hapiJwt from 'hapi-auth-cookie-jwt';
-const server = new hapi.Server();
-
 import {getPlugins} from './graphql/plugins';
 import {ROUTES} from './routes';
+import { execute, subscribe } from 'graphql';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+import {SCHEMA as schema} from './graphql/schema';
 
+const server = new hapi.Server();
 const plugins = getPlugins();
+
 
 server.connection({
   port: 4000,
@@ -37,3 +40,15 @@ server.register(hapiJwt, (err) => {
     });
   });
 });
+
+const subscriptionServer = SubscriptionServer.create(
+  {
+    execute,
+    subscribe,
+    schema
+  },
+  {
+    server: server.listener,
+    path: '/subscriptions',
+  }
+);

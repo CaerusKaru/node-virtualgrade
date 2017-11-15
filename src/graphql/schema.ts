@@ -2,8 +2,10 @@ import { makeExecutableSchema } from 'graphql-tools';
 import { GraphQLScalarType } from 'graphql';
 import { Kind } from 'graphql/language';
 import { Assignment, Assignments } from './models/Assignment';
-
 import {getUser} from './queries/user';
+import { PubSub, withFilter } from 'graphql-subscriptions';
+
+const pubsub = new PubSub();
 
 const typeDefs = `
 	scalar Date
@@ -74,6 +76,13 @@ const typeDefs = `
 	type Mutation {
     addAssignment(assignment: AssignmentInput!): Assignment
 	}
+	type Message {
+    id: ID!
+    text: String
+  }
+	type Subscription {
+    messageAdded(channelId: ID!): Message
+  }
 `;
 
 const resolvers = {
@@ -111,7 +120,20 @@ const resolvers = {
       //   .tap(assignment => Promise.map(assignment.steps, step => assignment.related('submission_steps').create(step)))
       //   .then(assignment => assignment);
     }
-  }
+  },
+  Subscription: {
+    // TODO implement actual pubsub methods
+    messageAdded: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator('messageAdded'),
+        (payload, variables) => {
+          // The `messageAdded` channel includes events for all channels, so we filter to only
+          // pass through events for the channel specified in the query
+          return payload.channelId === variables.channelId;
+        }
+      ),
+    }
+  },
 };
 
 export const SCHEMA = makeExecutableSchema({

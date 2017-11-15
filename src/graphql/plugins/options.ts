@@ -1,4 +1,4 @@
-import {SCHEMA} from '../schema';
+import {SCHEMA as schema} from '../schema';
 
 export const OPTIONS = {
   good: {
@@ -20,7 +20,7 @@ export const OPTIONS = {
     path: '/graphql',
     graphqlOptions: (request) => {
       return {
-        schema: SCHEMA,
+        schema,
         debug: true,
         context: request.auth.credentials
       };
@@ -31,6 +31,9 @@ export const OPTIONS = {
   },
   graphiqlHapi: {
     path: '/graphiql',
-    graphiqlOptions: { endpointURL: '/graphql' }
+    graphiqlOptions: {
+      endpointURL: '/graphql',
+      subscriptionsEndpoint: `ws://localhost:4000/subscriptions`
+    }
   }
 };

@@ -37,6 +37,7 @@
     "good-squeeze": "^5.0.2",
     "graphql": "^0.11.7",
     "graphql-server-hapi": "^1.2.0",
+    "graphql-subscriptions": "^0.5.4",
     "graphql-tools": "^2.6.1",
     "hapi": "^16.6.2",
     "hapi-auth-cookie-jwt": "^2.0.0",
@@ -44,6 +45,7 @@
     "jsonwebtoken": "^8.0.0",
     "knex": "^0.14.3",
     "ldapjs": "^1.0.2",
+    "minio": "^3.2.2",
     "node-uuid": "^1.4.8",
     "nodemon": "^1.17.1",
     "pg": "^7.3.0",
@@ -53,7 +55,8 @@
     "uuid": "^3.1.0",
     "webpack": "^3.11.0",
     "webpack-node-externals": "^1.6.0",
-    "snyk": "^1.69.10"
+    "snyk": "^1.69.10",
+    "subscriptions-transport-ws": "^0.9.1",
   },
   "snyk": true,
   "devDependencies": {

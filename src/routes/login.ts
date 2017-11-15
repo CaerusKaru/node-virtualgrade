@@ -1,5 +1,5 @@
 import {client as ldapClient} from '../../ldap';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import {COOKIE_CONFIG} from './cookie-config';
 import {escapeDN, escapeLDAPSearchFilter} from '../utils/ldap-serialize';
 import {RouteConfiguration} from 'hapi';
