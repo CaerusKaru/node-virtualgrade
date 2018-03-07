@@ -1,0 +1,71 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.10.2
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  'npm:hoek:20180212':
+    - nodemon > chokidar > fsevents > node-pre-gyp > hawk > hoek:
+        reason: None given
+        expires: '2018-04-06T22:51:10.728Z'
+    - nodemon > chokidar > fsevents > node-pre-gyp > hawk > boom > hoek:
+        reason: None given
+        expires: '2018-04-06T22:51:10.729Z'
+    - nodemon > chokidar > fsevents > node-pre-gyp > hawk > sntp > hoek:
+        reason: None given
+        expires: '2018-04-06T22:51:10.729Z'
+    - nodemon > chokidar > fsevents > node-pre-gyp > hawk > cryptiles > boom > hoek:
+        reason: None given
+        expires: '2018-04-06T22:51:10.729Z'
+    - nodemon > chokidar > fsevents > node-pre-gyp > request > hawk > hoek:
+        reason: None given
+        expires: '2018-04-06T22:51:10.729Z'
+    - nodemon > chokidar > fsevents > node-pre-gyp > request > hawk > boom > hoek:
+        reason: None given
+        expires: '2018-04-06T22:51:10.729Z'
+    - nodemon > chokidar > fsevents > node-pre-gyp > request > hawk > sntp > hoek:
+        reason: None given
+        expires: '2018-04-06T22:51:10.729Z'
+    - nodemon > chokidar > fsevents > node-pre-gyp > request > hawk > cryptiles > boom > hoek:
+        reason: None given
+        expires: '2018-04-06T22:51:10.729Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > hawk > hoek:
+        reason: None given
+        expires: '2018-04-06T22:51:10.729Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > hawk > boom > hoek:
+        reason: None given
+        expires: '2018-04-06T22:51:10.729Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > hawk > sntp > hoek:
+        reason: None given
+        expires: '2018-04-06T22:51:10.729Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > hawk > cryptiles > boom > hoek:
+        reason: None given
+        expires: '2018-04-06T22:51:10.729Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > hawk > hoek:
+        reason: None given
+        expires: '2018-04-06T22:51:10.729Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > hawk > boom > hoek:
+        reason: None given
+        expires: '2018-04-06T22:51:10.729Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > hawk > sntp > hoek:
+        reason: None given
+        expires: '2018-04-06T22:51:10.729Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > hawk > cryptiles > boom > hoek:
+        reason: None given
+        expires: '2018-04-06T22:51:10.729Z'
+    - hapi-auth-jwt > hoek:
+        reason: None given
+        expires: '2018-04-06T22:51:10.729Z'
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:debug:20170905':
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > debug:
+        patched: '2018-03-07T22:48:29.214Z'
+    - nodemon > chokidar > fsevents > node-pre-gyp > tar-pack > debug:
+        patched: '2018-03-07T22:48:29.214Z'
+  'npm:ms:20170412':
+    - hapi-auth-jwt > jsonwebtoken > ms:
+        patched: '2018-03-07T22:48:29.214Z'
+  'npm:tough-cookie:20170905':
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > tough-cookie:
+        patched: '2018-03-07T22:48:29.214Z'
+    - nodemon > chokidar > fsevents > node-pre-gyp > request > tough-cookie:
+        patched: '2018-03-07T22:48:29.214Z'
