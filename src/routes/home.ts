@@ -1,6 +1,4 @@
-import {RouteConfiguration} from 'hapi';
-
-export const HOME_ROUTE: RouteConfiguration = {
+export const HOME_ROUTE = {
   method: 'GET',
   path: '/',
   handler: (request, reply) => {

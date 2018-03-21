@@ -6,40 +6,49 @@ import { execute, subscribe } from 'graphql';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import {SCHEMA as schema} from './graphql/schema';
 
-const server = new hapi.Server();
-const plugins = getPlugins();
-
-
-server.connection({
+const server = new hapi.Server({
+  host: 'localhost',
   port: 4000,
   routes: {
     cors: {
       origin: ['http://localhost:4200'],
       credentials: true
     }
+  },
+});
+const plugins = getPlugins();
+
+const startup = (async () => {
+  try {
+    await server.start();
+    console.log(`Server running at: ${server.info.uri}`);
+  } catch (err) {
+    console.log(err);
   }
 });
 
-server.register(hapiJwt, (err) => {
+(async () => {
+  await server.register({
+    plugin: hapiJwt
+  });
+
   server.auth.strategy('token', 'jwt-cookie', {
     key: process.env.JWT_SECRET,
     verifyOptions: {
       algorithms: [ 'HS256' ],
     }
   });
-  server.register(plugins, err => {
-    if (err) {
-      throw err;
-    }
-    server.route(ROUTES);
-    server.start((err) => {
-      if (err) {
-        throw err;
-      }
-      console.log(`Server running at: ${server.info.uri}`);
-    });
+  server.auth.default({
+    mode: 'required',
+    strategy: 'token'
   });
-});
+
+  await server.register(plugins);
+
+  server.route(ROUTES);
+
+  await startup();
+})();
 
 const subscriptionServer = SubscriptionServer.create(
   {

@@ -5,15 +5,15 @@ import {OPTIONS} from './options';
 
 const plugins = [
   {
-    register: good,
+    plugin: good,
     options: OPTIONS.good
   },
   {
-    register: graphqlHapi,
+    plugin: graphqlHapi,
     options: OPTIONS.graphqlHapi
   },
   {
-    register: graphiqlHapi,
+    plugin: graphiqlHapi,
     options: OPTIONS.graphiqlHapi
   }
 ];
@@ -21,5 +21,5 @@ const plugins = [
 const whitelist = [good, graphqlHapi, graphiqlHapi];
 
 export function getPlugins() {
-  return plugins.filter(plugin => whitelist.indexOf(plugin.register) >= 0);
+  return plugins.filter(plugin => whitelist.indexOf(plugin.plugin) >= 0);
 }

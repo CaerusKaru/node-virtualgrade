@@ -1,7 +1,6 @@
 import {COOKIE_CONFIG} from './cookie-config';
-import {RouteConfiguration} from 'hapi';
 
-export const LOGOUT_ROUTE: RouteConfiguration = {
+export const LOGOUT_ROUTE = {
   method: 'POST',
   path: '/logout',
   handler: (req, reply) => {

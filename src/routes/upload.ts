@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import * as Boom from 'boom';
 import * as uuid from 'uuid';
-import {RouteConfiguration} from 'hapi';
 
 const UPLOAD_PATH = 'uploads';
 const fileOptions = { dest: `${UPLOAD_PATH}/`, fileFilter: null };
@@ -57,10 +56,10 @@ const _filesHandler = function (files, options) {
     return Promise.all(promises);
 };
 
-export const UPLOAD_ROUTE: RouteConfiguration = {
+export const UPLOAD_ROUTE = {
     method: 'POST',
     path: '/submissions',
-    config: {
+    options: {
         auth: 'token',
         payload: {
             output: 'stream',
