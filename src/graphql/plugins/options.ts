@@ -7,7 +7,7 @@ export const OPTIONS = {
         {
           module: 'good-squeeze',
           name: 'Squeeze',
-          args: [{ response: '*' }]
+          args: [{ response: '*', log: '*' }]
         },
         {
           module: 'good-console'

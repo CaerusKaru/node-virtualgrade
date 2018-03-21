@@ -66,16 +66,16 @@ export const UPLOAD_ROUTE = {
             allow: 'multipart/form-data'
         }
     },
-    handler: async (request, reply) => {
+    handler: async (request, h) => {
         try {
             const data = request.payload;
             const assignmentId = data['assignmentId'];
             const file = data['file'];
             const fileDetails = await uploader(file, fileOptions);
             console.log(assignmentId);
-            reply(`Saved file: ${fileDetails['filename']}`);
+            return h.response(`Saved file: ${fileDetails['filename']}`);
         } catch (err) {
-            reply(Boom.badRequest(err.message, err));
+            return Boom.badRequest(err.message, err);
         }
     },
 };

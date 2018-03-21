@@ -6,7 +6,7 @@ import { execute, subscribe } from 'graphql';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import {SCHEMA as schema} from './graphql/schema';
 
-const server = new hapi.Server({
+export const server = new hapi.Server({
   host: 'localhost',
   port: 4000,
   routes: {
@@ -15,6 +15,7 @@ const server = new hapi.Server({
       credentials: true
     }
   },
+  debug: { request: ['error'] } // TODO: REMOVE IN PRODUCTION
 });
 const plugins = getPlugins();
 
@@ -30,6 +31,13 @@ const startup = (async () => {
 (async () => {
   await server.register({
     plugin: hapiJwt
+  });
+
+  await server.register({
+    plugin: require('hapi-compat'),
+    options: {
+      server
+    }
   });
 
   server.auth.strategy('token', 'jwt-cookie', {

@@ -29,6 +29,7 @@
     "@types/hapi": "^17.0.7",
     "@types/knex": "^0.14.9",
     "@types/node": "^9.4.7",
+    "bluebird": "^3.5.1",
     "bookshelf": "^0.13.0",
     "boom": "^7.2.0",
     "concurrently": "^3.5.1",
@@ -62,6 +63,7 @@
   "devDependencies": {
     "@types/zen-observable": "^0.5.3",
     "apollo-link": "^1.2.1",
+    "hapi-compat": "^1.1.0",
     "npm-run-all": "^4.1.2",
     "rimraf": "^2.6.2",
     "ts-loader": "^4.1.0",
